@@ -1,3 +1,24 @@
+# ClasseVirtuelle_Projet2
+
+Le but de ce travail est de concevoir une application web simple afin de gérer une classe virtuelle à distance comportant les fonctionnalités suivantes : Prise des présences, Gestions des questions/réponses en temps réel
+
+# Login Mongodb
+
+- Username : classevirtuel@tutanota.com
+- Passwd : TheBestVirtualClass
+
+# Installation des package apres un clone
+
+- npm install next react react-dom
+- npm i socket.io
+- npm i mongoose
+
+# Cmd git
+
+-git add \*
+-git commit -m "message"
+-git push -u origin main
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
