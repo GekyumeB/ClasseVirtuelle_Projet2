@@ -9,9 +9,7 @@ Le but de ce travail est de concevoir une application web simple afin de gérer 
 
 # Installation des package apres un clone
 
-- npm install next react react-dom
-- npm i socket.io
-- npm i mongoose
+- npm install
 
 # Cmd git
 
@@ -26,9 +24,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
+npm start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

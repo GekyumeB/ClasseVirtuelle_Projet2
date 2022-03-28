@@ -2,15 +2,19 @@
   "name": "classevirtuelle",
   "version": "0.1.0",
   "private": true,
+  "main": "server-dbconnect/server.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "nodemon",
     "lint": "next lint"
   },
   "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "mongoose": "^6.2.5",
     "next": "^12.1.0",
+    "nodemon": "^2.0.15",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "socket.io": "^4.4.1"
