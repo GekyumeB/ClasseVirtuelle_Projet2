@@ -56,7 +56,7 @@ const Register = () => {
   return (
     <div>
       <head>
-        <title>EZ Games</title>
+        <title>Classe Virtuelle</title>
       </head>
 
       {/*BODY*/}
