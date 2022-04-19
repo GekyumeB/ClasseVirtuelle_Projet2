@@ -20,6 +20,7 @@
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dns": "^0.2.2",
     "dotenv": "^16.0.0",
     "ent": "~0.1.0",
@@ -47,6 +48,7 @@
     "semantic-ui-react": "^2.0.4",
     "slick-carousel": "^1.8.1",
     "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
     "yarn": "^1.22.18"
   },
   "devDependencies": {

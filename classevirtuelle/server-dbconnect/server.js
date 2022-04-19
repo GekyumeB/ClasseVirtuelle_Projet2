@@ -17,46 +17,23 @@ mongoose.connection.once("open", () => {
 // Bring in the models
 //require("./models/User");
 
-const app = require("./app");
-
 //intégration socket.io
+const express = require('express')
+const app = express()
+const server = require('http').createServer(app)
 
-const { createServer } = require("http");
-const { Server } = require("socket.io");  
-const httpServer = createServer(app);
-const io = new Server(httpServer, {  });  
-const ent = require('ent');
+const io = require("socket.io")(server, { cors: { origin: "*"} });
 
+io.on("connection", (socket) => {
+  console.log('conneté au serveur acev succès (o_o)');
+  console.log("utilisateur connecté : " + socket.id);
 
-  io.on("connection", (socket) => {
-	  console.log('connexion serveur');
-      console.log(socket.id);
-	 
-    socket.on('nouvel_utilisateur', function(pseudo) {
-	  console.log('New user : '+pseudo);
-      pseudo = ent.encode(pseudo);
-      socket.pseudo = pseudo; 
-      socket.broadcast.emit('nouvel_utilisateur', pseudo);
-    });
+  socket.on('message', (data) => {
+    console.log('Message reçcu sur le server : ', data)
+    io.emit('message', data)     
+  });  
+});
 
-    // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
-    socket.on('message', function (message) {
-	  console.log('message : ');
-      message = ent.encode(message);
-      console.log(message);
-	console.log('de l\'utilisateur');
-      socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
-    });
-  
-    socket.on('déconnexion', function(pseudo) {
-    pseudo = ent.encode(pseudo);
-    socket.pseudo = pseudo;
-    socket.broadcast.emit(pseudo, 'déconnecté');
-    });	
-	  
- });
-
-//app.listen a été remplacé par httpServer.listen (comme indiqué sur le site socket.io)
-httpServer.listen(8080, () => {
-  console.log("Server listenting on port 8080");
+server.listen(8080, () =>{
+  console.log('le serveur est en ecoute sur le port 8080 et est en cours d\'execution...');
 });
