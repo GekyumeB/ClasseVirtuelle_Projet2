@@ -1,12 +1,12 @@
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import { useContext, useState } from 'react';
-import { Store } from '../utils/Store';
-import Cookies from 'js-cookie';
-import { TextField } from '@material-ui/core';
-import { useSnackbar } from 'notistack';
-import en from '../utils/Language/en';
-import fr from '../utils/Language/fr';
+import { useRouter } from "next/router";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Store } from "../utils/Store";
+import Cookies from "js-cookie";
+import { TextField } from "@material-ui/core";
+import { useSnackbar } from "notistack";
+import en from "../utils/Language/en";
+import fr from "../utils/Language/fr";
 
 function Home() {
   //Router
@@ -20,19 +20,19 @@ function Home() {
   const { user } = state;
 
   //Variable pour le language selectionné contenue dans les cookies.
-  var locale = Cookies.get('lang');
+  var locale = Cookies.get("lang");
 
   //Va chercher le fichier de langue selon le language selectionné.
-  const t = locale === 'en' ? en : fr;
+  const t = locale === "en" ? en : fr;
 
   //si l'utilisateur est déja connecté, il retourne à la page principale.
   if (user) {
-    router.push('/');
+    router.push("/");
   }
 
   //Email et password avec setter.
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   //Handler lorsque le form est soumis.
   const submitHandler = async (e) => {
@@ -40,23 +40,23 @@ function Home() {
     closeSnackbar();
     try {
       //Reqête ajax qui va effectué la méthode de connection selon l'information entré.
-      const { data } = await axios.post('/api/users/login', {
+      const { data } = await axios.post("/api/users/login", {
         email,
         password,
       });
 
       //Envoie l'information de l'utilisateur.
-      dispatch({ type: 'USER_NAME', payload: data.name });
-      dispatch({ type: 'USER_LOGIN', payload: data.email });
+      dispatch({ type: "USER_NAME", payload: data.name });
+      dispatch({ type: "USER_LOGIN", payload: data.email });
 
       //Sauvgarde les données de l'utilisateur dans les cookies.
-      Cookies.set('userName', data.name);
-      Cookies.set('user', data.email);
+      Cookies.set("userName", data.name);
+      Cookies.set("user", data.email);
     } catch (err) {
       //Montre une erreur dans la snackbar si une est reçu.
       enqueueSnackbar(
         err.response.data ? err.response.data.message : err.message,
-        { variant: 'error' }
+        { variant: "error" }
       );
     }
   };
@@ -64,8 +64,8 @@ function Home() {
   //Handler de la selection de language.
   const laguageHandler = async () => {
     //Change la langue dans les cookies selon le language selectionné.
-    locale === 'en' ? Cookies.set('lang', 'fr') : Cookies.set('lang', 'en');
-    router.push('/LogIn');
+    locale === "en" ? Cookies.set("lang", "fr") : Cookies.set("lang", "en");
+    router.push("/LogIn");
   };
 
   return (
@@ -78,7 +78,7 @@ function Home() {
           onClick={laguageHandler}
           className="link underline text-blue-400 mr-8 mt-2"
         >
-          {locale === 'en' ? <>Français</> : <>English</>}
+          {locale === "en" ? <>Français</> : <>English</>}
         </p>
       </div>
       {/*BODY*/}
@@ -104,7 +104,7 @@ function Home() {
                   className="w-3/5"
                   onChange={(e) => setEmail(e.target.value)}
                   variant="outlined"
-                  inputProps={{ type: 'email' }}
+                  inputProps={{ type: "email" }}
                 ></TextField>
 
                 <p className="text-white text-opacity-30  mt-8 text-left flex-row opacity: 0.5 font-text pt-4 text-xl md:text-xl lg:text-xl  ">
@@ -116,7 +116,7 @@ function Home() {
                   className="w-3/5"
                   onChange={(e) => setPassword(e.target.value)}
                   variant="outlined"
-                  inputProps={{ type: 'password' }}
+                  inputProps={{ type: "password" }}
                 ></TextField>
               </div>
               <button
@@ -132,7 +132,7 @@ function Home() {
                 {t.signuptext}
               </p>
               <button
-                onClick={() => router.push('/SignUpAuth')}
+                onClick={() => router.push("/SignUpAuth")}
                 className="border-2 rounded mr-8 lg:px-5 lg:mt-4 lg:ml-8 lg:py-2 lg:min-w-38 border-blue-400 text-blue-400 hover:border-gray-500 md:px-8 md:mr-8 md:mt-4 md:ml-8 md:py-2 lg:min-w-38"
               >
                 {t.signupBTN}
