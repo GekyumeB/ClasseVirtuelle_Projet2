@@ -9,13 +9,6 @@
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
-    "@emotion/react": "^11.8.2",
-    "@emotion/styled": "^11.8.1",
-    "@material-ui/core": "^5.0.0-alpha.34",
-    "@material-ui/lab": "^4.0.0-alpha.61",
-    "@mui/material": "^5.5.3",
-    "@paypal/checkout-server-sdk": "^1.0.3",
-    "@paypal/react-paypal-js": "^4.1.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dns": "^0.2.2",

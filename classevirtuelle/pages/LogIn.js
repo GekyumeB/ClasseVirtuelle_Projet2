@@ -1,143 +1,106 @@
-import { useRouter } from "next/router";
-import axios from "axios";
-import { useContext, useState } from "react";
-import { Store } from "../utils/Store";
-import Cookies from "js-cookie";
-import { TextField } from "@material-ui/core";
-import { useSnackbar } from "notistack";
-import en from "../utils/Language/en";
-import fr from "../utils/Language/fr";
+import React, { useState } from "react";
+import { signIn } from "next-auth/client";
 
-function Home() {
-  //Router
-  const router = useRouter();
+import { toast } from "react-toastify";
+//import ButtonLoader from "../layout/ButtonLoader";
 
-  //Snackbar de notification
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+import { getSession } from "next-auth/client";
 
-  //État de l'utilisateur
-  const { state, dispatch } = useContext(Store);
-  const { user } = state;
-
-  //Variable pour le language selectionné contenue dans les cookies.
-  var locale = Cookies.get("lang");
-
-  //Va chercher le fichier de langue selon le language selectionné.
-  const t = locale === "en" ? en : fr;
-
-  //si l'utilisateur est déja connecté, il retourne à la page principale.
-  if (user) {
-    router.push("/");
-  }
-
-  //Email et password avec setter.
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  //Handler lorsque le form est soumis.
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    closeSnackbar();
-    try {
-      //Reqête ajax qui va effectué la méthode de connection selon l'information entré.
-      const { data } = await axios.post("/api/users/login", {
-        email,
-        password,
-      });
 
-      //Envoie l'information de l'utilisateur.
-      dispatch({ type: "USER_NAME", payload: data.name });
-      dispatch({ type: "USER_LOGIN", payload: data.email });
+    setLoading(true);
 
-      //Sauvgarde les données de l'utilisateur dans les cookies.
-      Cookies.set("userName", data.name);
-      Cookies.set("user", data.email);
-    } catch (err) {
-      //Montre une erreur dans la snackbar si une est reçu.
-      enqueueSnackbar(
-        err.response.data ? err.response.data.message : err.message,
-        { variant: "error" }
-      );
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      window.location.href = "/chat";
     }
   };
 
-  //Handler de la selection de language.
-  const laguageHandler = async () => {
-    //Change la langue dans les cookies selon le language selectionné.
-    locale === "en" ? Cookies.set("lang", "fr") : Cookies.set("lang", "en");
-    router.push("/LogIn");
-  };
-
   return (
-    <div>
-      <head>
-        <title>Classe Virtuelle</title>
-      </head>
-      <div className="bg-gg  flex justify-end  ">
-        <p
-          onClick={laguageHandler}
-          className="link underline text-blue-400 mr-8 mt-2"
-        >
-          {locale === "en" ? <>Français</> : <>English</>}
-        </p>
-      </div>
-      {/*BODY*/}
-      <div className="bg-gg sm:h-screen  items-center justify-center">
-        <p className="text-blue-400 flex justify-center  flex-row opacity: 1 font-text pt-16 text-xl md:text-2xl lg:text-4xl  text-center">
-          {t.title}
-        </p>
-
-        <div className="bg-gg items-center  justify-center flex h-6/8">
-          <div className="bg-gb rounded-lg m-8 md:m-16  md:w-3/5   md:rounded-lg  lg:m-16  lg:w-2/5   lg:rounded-lg">
-            <p className="text-white mt-8 ml-16 text-left flex-row opacity: 1 font-text pt-4 text-xl md:text-xl lg:text-xl  ">
-              {t.description}
-            </p>
-
-            <form onSubmit={submitHandler}>
-              <div className="ml-8">
-                <p className="text-white text-opacity-30  mt-8 text-left flex-row opacity: 0.5 font-text pt-4 text-xl md:text-xl lg:text-xl  ">
-                  {t.email}
-                </p>
-
-                {/*Textfield pour le email*/}
-                <TextField
-                  className="w-3/5"
-                  onChange={(e) => setEmail(e.target.value)}
-                  variant="outlined"
-                  inputProps={{ type: "email" }}
-                ></TextField>
-
-                <p className="text-white text-opacity-30  mt-8 text-left flex-row opacity: 0.5 font-text pt-4 text-xl md:text-xl lg:text-xl  ">
-                  {t.password}
-                </p>
-
-                {/*Textfield pour le mot de passe*/}
-                <TextField
-                  className="w-3/5"
-                  onChange={(e) => setPassword(e.target.value)}
-                  variant="outlined"
-                  inputProps={{ type: "password" }}
-                ></TextField>
-              </div>
-              <button
-                type="submit"
-                className="border-2 rounded w-24 mt-8 ml-8 lg:px-5 lg:mt-8 lg:ml-8 lg:py-2 lg:w-56  md:mt-8 md:ml-8 md:py-2 md:w-56 border-blue-400 text-blue-400 hover:border-gray-500  md:px-8 "
-              >
-                {t.loginBTN}
-              </button>
-            </form>
-
-            <div className="items-center mt-16 mb-8 flex">
-              <p className="text-white text-opacity-30  ml-8 sm:text-sm text-left flex-row opacity: 0.5 font-text pt-4 lg:text-xl md:text-ml lg:text-ml  ">
-                {t.signuptext}
-              </p>
-              <button
-                onClick={() => router.push("/SignUpAuth")}
-                className="border-2 rounded mr-8 lg:px-5 lg:mt-4 lg:ml-8 lg:py-2 lg:min-w-38 border-blue-400 text-blue-400 hover:border-gray-500 md:px-8 md:mr-8 md:mt-4 md:ml-8 md:py-2 lg:min-w-38"
-              >
-                {t.signupBTN}
-              </button>
+    <div className="flex min-h-[90vh] justify-center items-center bg-black h-screen">
+      <div className="w-[35%] h-[70vh] bg-slate-900 rounded-lg relative flex z-20  border-solid border-[1px] border-slate-400">
+        <div className="flex items-center px-[20px] w-full">
+          <div className="h-full w-full flex flex-col justify-center">
+            <div className="flex justify-center items-center mb-[30px]">
+              <h2 className="flex justify-center text-[40px] text-slate-400 font-bold ml-[10px] uppercase">
+                {" "}
+                LOGIN
+              </h2>
             </div>
+            <form className="flex flex-col" onSubmit={submitHandler}>
+              <div className="flex flex-col justify-center">
+                <div className="flex items-center w-[85%] p-[15px] ml-[5%] bg-slate-300 mb-[15px]">
+                  <input
+                    className="w-full pl-[10px] border-none outline-none text-[13px] bg-slate-300 placeholder:text-black"
+                    type="email"
+                    placeholder="Courriel"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    pattern="\S+@\S+\.\S+"
+                    title="Your email is invalid"
+                    required
+                  />
+                </div>
+                <div className="flex items-center w-[85%] p-[15px] ml-[5%] bg-slate-300 mb-[15px]">
+                  <input
+                    className="w-full pl-[10px] border-none outline-none text-[13px] bg-slate-300 placeholder:text-black"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Mot de passe"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    minLength={6}
+                  />
+                  <div onClick={() => setShowPassword(!showPassword)}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 cursor-pointer"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-center my-[10px]">
+                <button
+                  disabled={loading ? true : false}
+                  type="submit"
+                  className="w-[170px] text-[16px] font-[600] text-slate-300 bg-blue-500 cursor-pointer m-[20px] 
+                  h-[50px] text-center border-none bg-[length:300%_100%]"
+                >
+                  {loading ? "Connection....." : "Connection"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -145,4 +108,19 @@ function Home() {
   );
 }
 
-export default Home;
+export async function getServerSideProps(context) {
+  const session = await getSession({ req: context.req });
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/chat",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
