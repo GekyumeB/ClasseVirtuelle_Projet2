@@ -5,13 +5,13 @@ import { loadUser } from "../redux/actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
-const socket = io('http://localhost:3000')
+const socket = io("http://localhost:3000");
 
 export default function chat() {
   const dispatch = useDispatch();
 
   const [message, setMessage] = useState("");
-  const [chat, setChat] = useState([])
+  const [chat, setChat] = useState([]);
 
   const { user, loading } = useSelector((state) => state.loadedUser);
 
@@ -21,32 +21,40 @@ export default function chat() {
     }
   }, [dispatch, user]);
 
-  useEffect(() =>{
-    socket.on('message', data => {
-      setChat([...chat, data])
-    })
-  })
+  useEffect(() => {
+    socket.on("message", (data) => {
+      setChat([...chat, data]);
+    });
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(message);
-    socket.emit("message", {user,message});
+
+    const msg = { userId: user._id, user: user.name, message: message };
+    setChat([...chat, msg]);
+
+    socket.emit("message", msg);
     setMessage("");
   };
 
   return (
     <div className="App">
       <div>{user && `Connecter : ${user.name}`}</div>
-      <div>
-      <br/>
-            Message:
-
-            {chat.map((data, index) => {
-              return(
-                <h3 key={index}>{user.name} : <span>{data.message}</span></h3>
-              )
-            })} 
-            <br/>
+      <div className="block">
+        <br />
+        Message:
+        {chat.map((c, index) => {
+          return (
+            <div
+              key={index}
+              className={c.userId == user._id ? "bg-blue-400" : "bg-green-400"}
+            >
+              {c.user} : <span>{c.message}</span>
+            </div>
+          );
+        })}
+        <br />
       </div>
       <form onSubmit={handleSubmit}>
         <input
@@ -78,6 +86,6 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: {  },
+    props: {},
   };
 }
