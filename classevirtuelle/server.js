@@ -29,14 +29,14 @@ app.prepare().then(() => {
     console.log(`>> Ready on http://${hostname}:${port}`);
   });
 
-  const io = socket(server);
+  const io = socket(server, { cors:{ origin:'*' }});
 
   io.on("connection", (socket) => {
     console.log("Socket Ready");
 
-    socket.on("message", (data) => {
+    socket.on("message", (data) => {      
       console.log(data);
-      socket.emit("message", data);
+      socket.broadcast.emit("message", data);
     });
   });
 });
