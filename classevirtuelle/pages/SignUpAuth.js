@@ -55,9 +55,7 @@ const Register = () => {
   };
   return (
     <div>
-      <head>
-        <title>Classe Virtuelle</title>
-      </head>
+      
 
       {/*BODY*/}
       <div className="bg-gg   items-center justify-center">
