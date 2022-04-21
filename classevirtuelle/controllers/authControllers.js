@@ -1,4 +1,4 @@
-import User from "../models/user";
+import User from "../models/userModel";
 import cloudinary from "cloudinary";
 
 import ErrorHandler from "../utils/errorHandler";

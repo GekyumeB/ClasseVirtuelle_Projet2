@@ -4,7 +4,7 @@ const next = require("next");
 const socket = require("socket.io");
 
 const formatMessage = require('./utils/messages')
-const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users')
+const { userJoin, getCurrentUser, userLeave, getRoomUsers, sendMsg } = require('./controllers/chatControllers')
 
 require("dotenv").config({ path: "./.env" });
 
@@ -33,6 +33,8 @@ app.prepare().then(() => {
   });
 
   const botName = "Bot";
+  const botImage = 'https://res.cloudinary.com/dhouw3lii/image/upload/v1650569520/ClasseVirtuelle/avatars/bot_anw0og.png'
+  
   const io = socket(server, { cors: { origin: '*' } });
 
   io.on('connection', socket => {
@@ -47,14 +49,14 @@ app.prepare().then(() => {
       socket.join(user.room);
 
       // Welcome current user
-      socket.emit("message", formatMessage(botName, '', "Welcome to ChatCord!"));
+      socket.emit("message", formatMessage(0, botName, botImage, "Welcome to ChatCord!"));
 
       // Broadcast when a user connects
       socket.broadcast
         .to(user.room)
         .emit(
           "message",
-          formatMessage(botName, '', `${user.userprofile.name} has joined the chat`)
+          formatMessage(0, botName, botImage, `${user.userprofile.name} has joined the chat`)
         );
 
       // Send users and room info
@@ -66,12 +68,16 @@ app.prepare().then(() => {
     });
 
     // Listen for chatMessage
-    socket.on("chatMessage", (msg) => {
+    socket.on("chatMessage", async (msg) => {
       const user = getCurrentUser(socket.id);
       //console.log('server.js -68- MSG: '+msg);
-      console.log("*** USER ***");
-      console.log(user);
-      io.to(user.room).emit("message", formatMessage(user.userprofile.name, user.userprofile.avatar.url, msg));
+      //console.log("*** USER ***");
+      //console.log(user);
+      const { newMsg } = await sendMsg(user.userprofile._id,  user.userprofile.name, user.userprofile.avatar.url, msg, user.room)
+      
+      console.log(newMsg);
+
+      io.to(user.room).emit("message", formatMessage(user.userprofile._id, user.userprofile.name, user.userprofile.avatar.url, msg));
     });
 
     // Runs when client disconnects
@@ -81,7 +87,7 @@ app.prepare().then(() => {
        if (user) {
          io.to(user.room).emit(
            "message",
-           formatMessage(botName, '', `${user.userprofile.name} has left the chat`)
+           formatMessage(0, botName, botImage, `${user.userprofile.name} has left the chat`)
          );
    
          // Send users and room info
