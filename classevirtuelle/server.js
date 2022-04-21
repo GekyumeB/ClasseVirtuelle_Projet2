@@ -18,7 +18,7 @@ app.prepare().then(() => {
   const express_server = express();
 
   express_server.get("/", (req, res) => {
-    return app.render(req, res, "/login");
+    return app.render(req, res, "/");
   });
 
   // TODO : Ajouter les autres routes

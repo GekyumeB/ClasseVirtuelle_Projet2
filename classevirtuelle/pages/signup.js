@@ -44,7 +44,7 @@ export default function Signup() {
 
   useEffect(() => {
     if (success) {
-      router.push("/login");
+      router.push("/");
     }
 
     if (error) {
@@ -251,7 +251,7 @@ export async function getServerSideProps(context) {
   if (session) {
     return {
       redirect: {
-        destination: "/login",
+        destination: "/",
         permanent: false,
       },
     };
