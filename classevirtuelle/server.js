@@ -77,7 +77,13 @@ app.prepare().then(() => {
       
       console.log(newMsg);
 
-      io.to(user.room).emit("message", formatMessage(user.userprofile._id, user.userprofile.name, user.userprofile.avatar.url, msg));
+      if(newMsg){
+        io.to(user.room).emit("message", formatMessage(newMsg.userId, newMsg.username, newMsg.avatarUrl, newMsg.text, newMsg.time));
+      }
+    else {
+      console.log('Erreur');
+    }
+
     });
 
     // Runs when client disconnects

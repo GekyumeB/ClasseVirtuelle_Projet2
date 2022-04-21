@@ -36,11 +36,6 @@ const getRoomUsers = (room) => {
 
 const sendMsg = async (userId, username, avatarUrl, message, roomName) => {
   try {
-    const room = await ChatModel.findOne({ room: roomName })
-
-    console.log('*** ROOM ***');
-    console.log(room);
-
     const newMsg = {
       userId,
       username,
@@ -48,53 +43,18 @@ const sendMsg = async (userId, username, avatarUrl, message, roomName) => {
       text: message,
       time: Date.now()
     }
-
-    console.log('*** NEWMSG ***');
-    console.log(newMsg);
-
-/*
-const user = await User.create({
-    name,
-    email,
-    password,
-    avatar: {
-      public_id: result.public_id,
-      url: result.secure_url,
-    },
-  });
-
-*/
-    if (room === null) {
-      console.log('*** IF ROOM ***');
-      
-      const room = await ChatModel.create({
-        room: roomName,
-        messages: [
-          {
-            userId: newMsg.userId,
-            username: newMsg.username,
-            avatarUrl: newMsg.avatarUrl,
-            text: newMsg.text,
-            time: Date.now(),
-          }
-        ]
-      })
-
-      console.log('*** ROOM CREATE ***');
-      console.log(room);
-    }
-    //
-    else {
-      console.log('**** ELSE IF ROON ***');
-      //const newRoom = { room: roomName, message: [newMsg] }
-      //room.message.unshift(newRoom)
-
-      room.message.push(newMsg)
-
-      console.log('*** APRES PUSH ***');
-      console.log(room);
-      await room.save()
-    }
+    await ChatModel.create({
+      room: roomName,
+      messages: [
+        {
+          userId: userId,
+          username: username,
+          avatarUrl: avatarUrl,
+          text: message,
+          time: Date.now(),
+        }
+      ]
+    })
 
     return { newMsg }
   } catch (error) {
