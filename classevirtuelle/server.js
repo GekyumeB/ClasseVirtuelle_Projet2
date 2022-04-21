@@ -36,7 +36,7 @@ app.prepare().then(() => {
 
     socket.on("message", (data) => {      
       console.log(data);
-      socket.broadcast.emit("message", data);
+      io.emit("message", data);
     });
   });
 });
