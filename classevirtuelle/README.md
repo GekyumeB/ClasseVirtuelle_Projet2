@@ -11,9 +11,9 @@ Le but de ce travail est de concevoir une application web simple afin de gérer 
 
 ```bash
 npm install
-
+```
 ou
-
+```bash
 npm i
 ```
 
@@ -21,7 +21,11 @@ npm i
 
 ```bash
 git add \*
+```
+```bash
 git commit -m "message"
+```
+```bash
 git push -u origin main
 ```
 
