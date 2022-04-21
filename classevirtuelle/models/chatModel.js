@@ -7,15 +7,26 @@ const chatSchema = new mongoose.Schema({
     required: true,
     maxLength: [30, "Your room name cannot exceed 30 characters"],
   },
-  messages: [
-    {
-      userId: { type: String, required: true },
-      username: { type: String, required: true },
-      avatarUrl: { type: String, required: true },
-      text: { type: String, maxlength: [250, 'Your message name cannot exceed 250 characters'], required: true },
-      time: { type: Date }
-    }
-  ]
+  userId: {
+    type: String,
+    required: true
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  avatarUrl: {
+    type: String,
+    required: true
+  },
+  text: { 
+    type: String, 
+    maxlength: [250, 'Your message name cannot exceed 250 characters'], 
+    required: true 
+  },
+  time: { 
+    type: Date 
+  }
 });
 
 /*

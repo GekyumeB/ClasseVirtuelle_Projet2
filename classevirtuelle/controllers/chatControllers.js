@@ -45,15 +45,11 @@ const sendMsg = async (userId, username, avatarUrl, message, roomName) => {
     }
     await ChatModel.create({
       room: roomName,
-      messages: [
-        {
-          userId: userId,
-          username: username,
-          avatarUrl: avatarUrl,
-          text: message,
-          time: Date.now(),
-        }
-      ]
+      userId: userId,
+      username: username,
+      avatarUrl: avatarUrl,
+      text: message,
+      time: Date.now(),
     })
 
     return { newMsg }
@@ -63,10 +59,26 @@ const sendMsg = async (userId, username, avatarUrl, message, roomName) => {
   }
 }
 
+const loadMsg = async (roomName) => {
+  try {
+    const chat = await ChatModel.find({ room: roomName });
+
+    if (!chat) {
+      return { error: "No chat found" };
+    }
+
+    return { chat };
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
 module.exports = {
   userJoin,
   getCurrentUser,
   userLeave,
   getRoomUsers,
   sendMsg,
+  loadMsg,
 };
