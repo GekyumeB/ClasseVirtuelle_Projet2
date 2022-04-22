@@ -4,6 +4,9 @@ import { getSession } from "next-auth/client";
 import { loadUser } from "../redux/actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
+import { signOut } from "next-auth/client";
+import Link from "next/link";
+import convertTime from '../utils/convertTime'
 
 const socket = io("http://localhost:3000");
 
@@ -11,7 +14,7 @@ export default function chat() {
   const dispatch = useDispatch();
 
   const [message, setMessage] = useState("");
-  const [chat, setChat] = useState([]);
+  const [chat, setChat] = useState([{}]);
 
   const [room, setRoom] = useState('')
   const [usersConnect, setUsersConnect] = useState([])
@@ -43,11 +46,17 @@ export default function chat() {
 
   useEffect(() => {
     socket.on("message", (data) => {
-
-      setChat([...chat, data]);
+      console.log(data);
+      console.log('************************************************');
+      setChat([{...chat, data}]);
+      console.log('**//// CHAT //////**');
       console.log(chat);
     });
   }, []);
+
+  const logoutHandler = () => {
+    signOut();
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -60,38 +69,13 @@ export default function chat() {
     setMessage("");
   };
 
-  //********************************************************************************************************************** */
-  /* 
-   useEffect(() => {
-     if (!user) {
- 
-       dispatch(loadUser());
-     }
-     if (user) {
-       socket.emit("presence", user.name);
-     }
-   }, [dispatch, user]);
-  
-   useEffect(() => {
-     socket.on("message", (data) => {
-       setChat([...chat, data]);
-     });
-   });
- 
-   const handleSubmit = (e) => {
-     e.preventDefault();
-     console.log(message);
- 
-     const msg = { userId: user._id, user: user.name, message: message };
-     setChat([...chat, msg]);
- 
-     socket.emit("message", msg);
-     setMessage("");
-   };*/
-
   return (
     <div className="h-screen w-full bg-fuchsia-300">
-
+      <Link href="/">
+        <a className="p-2 text-white font-semibold bg-red-600 uppercase" onClick={logoutHandler}>
+          Quitter
+        </a>
+      </Link>
       <div className="flex justify-center pt-20">
 
         <div className="bg-blue-500 mr-2">
@@ -162,20 +146,58 @@ export default function chat() {
           </div>
           <div className="block">
             <br />
-            {chat.map((c, index) => {
+            {chat.map((c) => {
               return (
 
                 <div className="relative w-full p-6 overflow-y-auto h-25">
-                  <ul className="space-y-2">
+                  <ul className="space-y-2">{console.log(c)}
                     <li className="flex justify-start">
                       <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
-                        <div class="grid grid-cols-4 gap-4">
-                          <div
-                            key={index}
-                            className={c.userId == user._id ? "bg-sky-200" : "bg-indigo-200"}
-                          >
-                            {c.username} :<span className="block">{c.text}</span>
-                          </div>
+                        <div className="grid grid-cols-4 gap-4">
+                          {
+                            c.userId === user._id ? (
+                              <div className="block bg-green-200">
+                                <div>
+                                {convertTime(c.time)}
+                                </div>
+                                <div> 
+                                {c.text}
+                                </div>
+                               
+                              </div>
+                            ) : (
+                             
+                             <div className="flex">
+                                
+                                <div className="relative my-auto mr-4">
+                                  <span className="absolute text-green-500">
+                                    <svg className="w-3 h-3">
+                                      <circle cx="4" cy="4" r="4" fill="currentColor"></circle>
+                                    </svg>
+                                  </span>
+                                  {user && (
+                                    <figure className="w-8 h-8 rounded-full">
+                                      <img
+                                        src={c.avatarUrl}
+                                        className="rounded-full "
+                                      />
+                                    </figure>
+                                  )}
+                                </div>
+                             
+                             <div className="block bg-blue-300">
+                                <div className="flex b">
+                                    <p className="pl-3">{c.username}</p> <p className="pl-3">{convertTime(c.time)}</p>
+                                </div>
+                                <div>
+                                  {c.text}
+                                </div>
+
+                             </div>
+                             
+                              </div>
+                           )
+                          }
                         </div>
                       </div>
                     </li>

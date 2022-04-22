@@ -2,7 +2,7 @@
 const express = require("express");
 const next = require("next");
 const socket = require("socket.io");
-const moment = require('moment');
+
 
 const formatMessage = require('./utils/messages')
 const { userJoin, getCurrentUser, userLeave, getRoomUsers, sendMsg, loadMsg } = require('./controllers/chatControllers')
@@ -53,7 +53,7 @@ app.prepare().then(() => {
             //console.log(c.username)
             //console.log(c.avatarUrl)
             //console.log(c.time)
-            socket.emit("message", formatMessage(c.userId, c.username, c.avatarUrl, c.time));
+            socket.emit("message", formatMessage(c.userId, c.role, c.username, c.avatarUrl, c.time));
           })
         }
       //console.log('***/ load /***');
@@ -64,14 +64,14 @@ app.prepare().then(() => {
       socket.join(user.room);
 
       // Welcome current user
-      socket.emit("message", formatMessage(0, botName, botImage, "Welcome to ChatCord!", moment().format('h:mm a')));
+      socket.emit("message", formatMessage(0, 'Bot', botName, botImage, "Welcome to ChatCord!", Date.now()));
 
       // Broadcast when a user connects
       socket.broadcast
         .to(user.room)
         .emit(
           "message",
-          formatMessage(0, botName, botImage, `${user.userprofile.name} has joined the chat`, moment().format('h:mm a'))
+          formatMessage(0, 'Bot', botName, botImage, `${user.userprofile.name} has joined the chat`, Date.now())
         );
 
       // Send users and room info
@@ -90,12 +90,12 @@ app.prepare().then(() => {
       //console.log('server.js -68- MSG: '+msg);
       //console.log("*** USER ***");
       //console.log(user);
-      const { newMsg } = await sendMsg(user.userprofile._id,  user.userprofile.name, user.userprofile.avatar.url, msg, user.room)
+      const { newMsg } = await sendMsg(user.userprofile._id, user.userprofile.role,  user.userprofile.name, user.userprofile.avatar.url, msg, user.room)
       
-      //console.log(newMsg);
+      console.log(newMsg);
 
       if(newMsg){
-        io.to(user.room).emit("message", formatMessage(newMsg.userId, newMsg.username, newMsg.avatarUrl, newMsg.text, newMsg.time));
+        io.to(user.room).emit("message", formatMessage(newMsg.userId, newMsg.role, newMsg.username, newMsg.avatarUrl, newMsg.text, newMsg.time));
       }
     else {
       console.log('Erreur');
@@ -110,7 +110,7 @@ app.prepare().then(() => {
        if (user) {
          io.to(user.room).emit(
            "message",
-           formatMessage(0, botName, botImage, `${user.userprofile.name} has left the chat`, moment().format('h:mm a'))
+           formatMessage(0, 'Bot', botName, botImage, `${user.userprofile.name} has left the chat`, Date.now())
          );
    
          // Send users and room info

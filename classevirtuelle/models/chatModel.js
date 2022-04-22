@@ -29,11 +29,4 @@ const chatSchema = new mongoose.Schema({
   }
 });
 
-/*
-username,
-    avatarUrl,
-    text,
-    time: moment().format('h:mm a')
-*/
-
 module.exports = mongoose.models.Chat || mongoose.model("Chat", chatSchema);

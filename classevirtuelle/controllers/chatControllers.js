@@ -34,10 +34,11 @@ const getRoomUsers = (room) => {
   return users.filter((user) => user.room === room);
 }
 
-const sendMsg = async (userId, username, avatarUrl, message, roomName) => {
+const sendMsg = async (userId, role, username, avatarUrl, message, roomName) => {
   try {
     const newMsg = {
       userId,
+      role,
       username,
       avatarUrl,
       text: message,
@@ -46,6 +47,7 @@ const sendMsg = async (userId, username, avatarUrl, message, roomName) => {
     await ChatModel.create({
       room: roomName,
       userId: userId,
+      role: role,
       username: username,
       avatarUrl: avatarUrl,
       text: message,

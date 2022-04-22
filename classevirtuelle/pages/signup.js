@@ -55,22 +55,13 @@ export default function Signup() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (typeCompte === "Etudiant") {
-      typeCompte = "student";
-    } else if (typeCompte === "Professeur") {
-      typeCompte = "teacher";
-    } else if (typeCompte === "Admin") {
-      typeCompte = "admin";
-    } else {
-      typeCompte = "";
-    }
 
     const userData = {
       name: firstname + " " + lastname,
       email,
       password,
       avatar,
-      typeCompte,
+      role:typeCompte,
     };
     console.log(typeCompte);
     console.log(userData);
@@ -177,7 +168,7 @@ export default function Signup() {
                   className="w-full pl-[10px] border-none outline-none text-[13px] bg-slate-300 placeholder:text-black"
                   onChange={(e) => setTypeCompte(e.target.value)}
                 >
-                  {["", "Etudiant", "Professeur", "Admin"].map((typeCompte) => (
+                  {["", "Étudiant", "Professeur", "Administrateur"].map((typeCompte) => (
                     <option key={typeCompte} value={typeCompte}>
                       {typeCompte}
                     </option>
