@@ -86,18 +86,6 @@ export default function chat() {
           >
             Chat
           </p>
-          <p
-            onClick={() => router.push('/')}
-            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-          >
-            Login
-          </p>
-          <p
-            onClick={() => router.push('/signup')}
-            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-          >
-            Signup
-          </p>
           <Link href="/">
             <a className="p-2 text-white font-semibold bg-red-600 uppercase" onClick={logoutHandler}>
               Quitter
@@ -210,7 +198,7 @@ export default function chat() {
                                 </div>
                                 <div className="block w-max rounded bg-blue-300">
                                   <div className="">
-                                    <p className="pl-3">{c.username}</p> <p className="pl-3">{convertTime(c.time)}</p>
+                                    <p className="pl-3">{c.username + "ㅤㅤㅤ"}{convertTime(c.time)}</p> <p className="pl-3"></p>
                                   </div>
                                   <div className="min-w-[500px] max-w-[500px]">
                                     {c.text}

@@ -48,12 +48,6 @@ export default function Home() {
             </p>
           </div>
           <p
-            onClick={() => router.push('/chat')}
-            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-          >
-            Chat
-          </p>
-          <p
             onClick={() => router.push('/')}
             className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
           >
