@@ -60,7 +60,7 @@ app.prepare().then(() => {
           room: user.room,
           users: getRoomUsers(user.room),
         });
-      }, 1000);
+      }, 10000);
     });
 
     // Listen for chatMessage
@@ -75,7 +75,6 @@ app.prepare().then(() => {
       else {
         console.log('Error : fetch database information is impossible');
       }
-
     });
 
     // Runs when client disconnects
@@ -83,11 +82,6 @@ app.prepare().then(() => {
       const user = userLeave(socket.id);
 
       if (user) {
-        io.to(user.room).emit(
-          "message",
-          formatMessage(0, 'Bot', botName, botImage, `${user.userprofile.name} has left the chat`, Date.now())
-        );
-
         // Send users and room info
         io.to(user.room).emit("roomUsers", {
           room: user.room,
