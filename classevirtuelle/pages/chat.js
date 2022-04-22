@@ -66,7 +66,7 @@ export default function chat() {
 
   return (
 
-    <div className="h-full w-full bg-neutral-900">
+    <div className="h-screen w-full bg-neutral-900">
       {/*&&&&&&&&&&&&&&&&&&&&&&&&&&&*/}
       <div>
         <div className="bg-gb w-full  h-24 flex space-x-3 items-center justify-center sm:h-24 sm:space-x-8  md:h-24  md:space-x-8  lg:h-20 lg:space-x-16 ">
@@ -222,7 +222,7 @@ export default function chat() {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 grid-flow-col gap-4 items-center justify-between w-full p-3 border-t border-gray-300">
-              <div>
+              <div className="justify-self-auto">
                 <input
                   type="text"
                   name="message"
@@ -235,7 +235,7 @@ export default function chat() {
                   required >
                 </input>
               </div>
-              <div>
+              <div className="justify-self-auto">
                 <button type="submit">
                   <svg className="w-10 h-10 mt-10 text-gray-500 origin-right transform rotate-90" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20" fill="currentColor">
