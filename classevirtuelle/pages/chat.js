@@ -14,7 +14,7 @@ export default function chat() {
   const dispatch = useDispatch();
 
   const [message, setMessage] = useState("");
-  const [chat, setChat] = useState([{}]);
+  const [chat, setChat] = useState([]);
 
   const [room, setRoom] = useState('')
   const [usersConnect, setUsersConnect] = useState([])
@@ -48,7 +48,7 @@ export default function chat() {
     socket.on("message", (data) => {
       console.log(data);
       console.log('************************************************');
-      setChat([{...chat, data}]);
+      setChat(chat => [...chat, data]);
       console.log('**//// CHAT //////**');
       console.log(chat);
     });
@@ -70,7 +70,7 @@ export default function chat() {
   };
 
   return (
-    <div className="h-screen w-full bg-fuchsia-300">
+    <div className="h-screen w-full bg-neutral-900">
       <Link href="/">
         <a className="p-2 text-white font-semibold bg-red-600 uppercase" onClick={logoutHandler}>
           Quitter
