@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
 import { loadUser } from "../redux/actions/userActions";
@@ -13,6 +13,8 @@ const socket = io("http://localhost:3000");
 export default function chat() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const mesageEndRef = useRef(null)
+
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
 
@@ -30,27 +32,18 @@ export default function chat() {
 
   useEffect(() => {
     if (user) {
-      //console.log(user._id);
-      // Join chatroom       userId, username, room
       socket.emit("joinRoom", { userprofile: user, room: room });
-
-      // Get room and users
+      // Liste personne connecte
       socket.on("roomUsers", ({ room, users }) => {
-        //console.log(users);
         setUsersConnect(users);
       });
     }
-    //console.log(users);
   }, [user, loading])
 
-
   useEffect(() => {
+    // Reception des messages
     socket.on("message", (data) => {
-      console.log(data);
-      console.log('************************************************');
       setChat(chat => [...chat, data]);
-      console.log('**//// CHAT //////**');
-      console.log(chat);
     });
   }, []);
 
@@ -58,60 +51,62 @@ export default function chat() {
     signOut();
   };
 
+  // Scroll au dernier message entre
+  useEffect(() => {
+    mesageEndRef.current?.scrollIntoView();
+  },[chat])
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    //console.log(message);
 
-    //const msg = { userId: user._id, user: user.name, message: message };
-    //setChat([...chat, msg]);
-
+    // Send message
     socket.emit("chatMessage", message);
     setMessage("");
   };
 
   return (
-    
+
     <div className="h-screen w-full bg-neutral-900">
-            {/*&&&&&&&&&&&&&&&&&&&&&&&&&&&*/}
+      {/*&&&&&&&&&&&&&&&&&&&&&&&&&&&*/}
+      <div>
+        <div className="bg-gb w-full  h-24 flex space-x-3 items-center justify-center sm:h-24 sm:space-x-8  md:h-24  md:space-x-8  lg:h-20 lg:space-x-16 ">
+          <div className="bg-gb items-center  ">
             <div>
-      <div className="bg-gb w-full  h-24 flex space-x-3 items-center justify-center sm:h-24 sm:space-x-8  md:h-24  md:space-x-8  lg:h-20 lg:space-x-16 ">
-        <div className="bg-gb items-center  ">
-          <div>
-            <p className="text-blue-400 opacity: 1 font-logo md:text-xl lg:text-3xl text-md text-center">
-              Classe
+              <p className="text-blue-400 opacity: 1 font-logo md:text-xl lg:text-3xl text-md text-center">
+                Classe
+              </p>
+            </div>
+            <p className="text-blue-400 opacity: 1 font-logo  text-md md:text-xl lg:text-3xl ">
+              Virtuelle
             </p>
           </div>
-          <p className="text-blue-400 opacity: 1 font-logo  text-md md:text-xl lg:text-3xl ">
-            Virtuelle
+          <p
+            onClick={() => router.push('/chat')}
+            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
+          >
+            Chat
           </p>
+          <p
+            onClick={() => router.push('/')}
+            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
+          >
+            Login
+          </p>
+          <p
+            onClick={() => router.push('/signup')}
+            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
+          >
+            Signup
+          </p>
+          <Link href="/">
+            <a className="p-2 text-white font-semibold bg-red-600 uppercase" onClick={logoutHandler}>
+              Quitter
+            </a>
+          </Link>
         </div>
-        <p
-          onClick={() => router.push('/chat')}
-          className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-        >
-          Chat
-        </p>
-        <p
-          onClick={() => router.push('/')}
-          className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-        >
-          Login
-        </p>
-        <p
-          onClick={() => router.push('/signup')}
-          className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-        >
-          Signup
-        </p>
-        <Link href="/">
-        <a className="p-2 text-white font-semibold bg-red-600 uppercase" onClick={logoutHandler}>
-          Quitter
-        </a>
-      </Link>
       </div>
-    </div>
       {/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/}
-      
+
       <div className="flex justify-center pt-5">
 
         <div className="bg-blue-500 mr-2">
@@ -144,15 +139,11 @@ export default function chat() {
                       </div>
                     ) : <></>}
                   </div>
-
-
-
                 </div>
               )
             })
           }
         </div>
-
         <div className="max-w-2xl border rounded bg-slate-400">
           <div class="grid grid-cols-4 gap-4">
             <div className="relative">
@@ -184,9 +175,8 @@ export default function chat() {
             <br />
             {chat.map((c) => {
               return (
-
                 <div class="chat2" className="relative w-full p-6 overflow-y-auto h-25">
-                  <ul className="space-y-2">{console.log(c)}
+                  <ul className="space-y-2">
                     <li className="flex justify-start">
                       <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
                         <div className="grid grid-cols-4 gap-4">
@@ -194,17 +184,15 @@ export default function chat() {
                             c.userId === user._id ? (
                               <div className="block w-max rounded bg-green-300">
                                 <div className="max-w">
-                                {convertTime(c.time)}
+                                  {convertTime(c.time)}
                                 </div>
-                                <div className = "max-w-[550px]"> 
-                                {c.text}
+                                <div className="max-w-[550px]">
+                                  {c.text}
                                 </div>
-                               
+
                               </div>
                             ) : (
-                             
-                             <div className="flex">
-                                
+                              <div className="flex">
                                 <div className="relative my-auto mr-4">
                                   <span className="absolute w-max text-green-500">
                                     <svg className="w-3 h-3">
@@ -218,20 +206,22 @@ export default function chat() {
                                         className="rounded-full "
                                       />
                                     </figure>
-                                  )} 
+                                  )}
                                 </div>
-                              <div className="block w-max rounded bg-blue-300">
-                                <div className="">
-                                  <p className="pl-3">{c.username}</p> <p className="pl-3">{convertTime(c.time)}</p>
+                                <div className="block w-max rounded bg-blue-300">
+                                  <div className="">
+                                    <p className="pl-3">{c.username}</p> <p className="pl-3">{convertTime(c.time)}</p>
+                                  </div>
+                                  <div className="min-w-[500px] max-w-[500px]">
+                                    {c.text}
+                                  </div>
                                 </div>
-                                <div className = "min-w-[500px] max-w-[500px]"> 
-                                {c.text}
-                                </div>
-                               
                               </div>
-                              </div>
-                           )
+                            )
                           }
+
+                          <div ref={mesageEndRef}/>
+
                         </div>
                       </div>
                     </li>
@@ -241,7 +231,6 @@ export default function chat() {
             })}
             <br />
           </div>
-
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 grid-flow-col gap-4 items-center justify-between w-full p-3 border-t border-gray-300">
               <div>
@@ -269,26 +258,8 @@ export default function chat() {
               </div>
             </div>
           </form>
-
-
-
         </div>
-
-
-
-
-
-
       </div>
-
-
-
-
-
-
-
-
-
     </div>
   );
 }

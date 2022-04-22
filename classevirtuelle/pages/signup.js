@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 import { toast } from "react-toastify";
-//import ButtonLoader from "../layout/ButtonLoader";
-
 import { getSession } from "next-auth/client";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -61,10 +59,8 @@ export default function Signup() {
       email,
       password,
       avatar,
-      role:typeCompte,
+      role: typeCompte,
     };
-    console.log(typeCompte);
-    console.log(userData);
     dispatch(registerUser(userData));
   };
 
@@ -209,11 +205,10 @@ export default function Signup() {
                 <button
                   disabled={submitDisabled ? true : false}
                   type="submit"
-                  className={`w-[170px] text-[16px] font-[600] text-slate-300 ${
-                    submitDisabled
+                  className={`w-[170px] text-[16px] font-[600] text-slate-300 ${submitDisabled
                       ? "bg-blue-300"
                       : "bg-blue-500 cursor-pointer"
-                  } m-[20px]
+                    } m-[20px]
                         h-[50px] text-center border-none bg-[length:300%_100%]`}
                 >
                   {loading ? "Soumettre...." : "Soumettre"}

@@ -22,8 +22,6 @@ app.prepare().then(() => {
     return app.render(req, res, "/");
   });
 
-  // TODO : Ajouter les autres routes
-
   express_server.all("*", (req, res) => {
     return handle(req, res);
   });
@@ -35,99 +33,67 @@ app.prepare().then(() => {
 
   const botName = "Bot";
   const botImage = 'https://res.cloudinary.com/dhouw3lii/image/upload/v1650569520/ClasseVirtuelle/avatars/bot_anw0og.png'
-  
+
   const io = socket(server, { cors: { origin: '*' } });
 
   io.on('connection', socket => {
 
     socket.on("joinRoom", async ({ userprofile, room }) => {
-      
+
+      // User is connected
       const user = userJoin(socket.id, userprofile, room);
-      
+
+      // Load database message
       const { chat } = await loadMsg(room)
 
-        if (chat) {
-          chat.map((c) =>{
-            //console.log(c.room);
-            //console.log(c.userId);
-            //console.log(c.username)
-            //console.log(c.avatarUrl)
-            //console.log(c.time)
-            socket.emit("message", formatMessage(c.userId, c.role, c.username, c.avatarUrl, c.text, c.time));
-          })
-        }
-      //console.log('***/ load /***');
-      //console.log(chat);
-      //console.log(socket.id);
-      //console.log(user);
-      
+      if (chat) {
+        chat.map((c) => {
+          socket.emit("message", formatMessage(c.userId, c.role, c.username, c.avatarUrl, c.text, c.time));
+        })
+      }
+
       socket.join(user.room);
-
-      // Welcome current user
-      socket.emit("message", formatMessage(0, 'Bot', botName, botImage, "Welcome to ChatCord!", Date.now()));
-
-      // Broadcast when a user connects
-      socket.broadcast
-        .to(user.room)
-        .emit(
-          "message",
-          formatMessage(0, 'Bot', botName, botImage, `${user.userprofile.name} has joined the chat`, Date.now())
-        );
 
       // Send users and room info
       setInterval(() => {
-      io.to(user.room).emit("roomUsers", {
-        room: user.room,
-        users: getRoomUsers(user.room),
-      });
-      //console.log(users);
-    }, 10000);
+        io.to(user.room).emit("roomUsers", {
+          room: user.room,
+          users: getRoomUsers(user.room),
+        });
+      }, 1000);
     });
 
     // Listen for chatMessage
     socket.on("chatMessage", async (msg) => {
       const user = getCurrentUser(socket.id);
-      //console.log('server.js -68- MSG: '+msg);
-      //console.log("*** USER ***");
-      //console.log(user);
-      const { newMsg } = await sendMsg(user.userprofile._id, user.userprofile.role,  user.userprofile.name, user.userprofile.avatar.url, msg, user.room)
-      
-      console.log(newMsg);
 
-      if(newMsg){
+      const { newMsg } = await sendMsg(user.userprofile._id, user.userprofile.role, user.userprofile.name, user.userprofile.avatar.url, msg, user.room)
+
+      if (newMsg) {
         io.to(user.room).emit("message", formatMessage(newMsg.userId, newMsg.role, newMsg.username, newMsg.avatarUrl, newMsg.text, newMsg.time));
       }
-    else {
-      console.log('Erreur');
-    }
+      else {
+        console.log('Error : fetch database information is impossible');
+      }
 
     });
 
     // Runs when client disconnects
-     socket.on("disconnect", () => {
-       const user = userLeave(socket.id);
-   
-       if (user) {
-         io.to(user.room).emit(
-           "message",
-           formatMessage(0, 'Bot', botName, botImage, `${user.userprofile.name} has left the chat`, Date.now())
-         );
-   
-         // Send users and room info
-         io.to(user.room).emit("roomUsers", {
-           room: user.room,
-           users: getRoomUsers(user.room),
-         });
-       }
-     });
+    socket.on("disconnect", () => {
+      const user = userLeave(socket.id);
 
-    //******************************************************** */
-    /* io.on("connection", (socket) => {
-       console.log("Socket Ready");
-   
-       socket.on("message", (data) => {      
-         console.log(data);
-         io.emit("message", data);
-       });*/
+      if (user) {
+        io.to(user.room).emit(
+          "message",
+          formatMessage(0, 'Bot', botName, botImage, `${user.userprofile.name} has left the chat`, Date.now())
+        );
+
+        // Send users and room info
+        io.to(user.room).emit("roomUsers", {
+          room: user.room,
+          users: getRoomUsers(user.room),
+        });
+      }
+    });
   });
 });

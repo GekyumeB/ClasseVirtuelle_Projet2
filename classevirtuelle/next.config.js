@@ -9,8 +9,6 @@ const nextConfig = {
     CLOUDINARY_API_KEY: "415191723535558",
     CLOUDINARY_API_SECRET: "qaVnIrTnr3AXGQIdFF7iIhPCsdE",
 
-    // TODO SendMail
-
     NEXTAUTH_URL: "http://localhost:3000",
     NEXTAUTH_SECRET: "aD23dqD3832$@v45hTR#@5245AFE7#$@643fC423G5sd",
   },

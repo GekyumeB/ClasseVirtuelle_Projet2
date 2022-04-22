@@ -19,13 +19,13 @@ const chatSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  text: { 
-    type: String, 
-    maxlength: [250, 'Your message name cannot exceed 250 characters'], 
-    required: true 
+  text: {
+    type: String,
+    maxlength: [250, 'Your message name cannot exceed 250 characters'],
+    required: true
   },
-  time: { 
-    type: Date 
+  time: {
+    type: Date
   }
 });
 

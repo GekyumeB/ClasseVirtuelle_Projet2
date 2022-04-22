@@ -34,6 +34,7 @@ const getRoomUsers = (room) => {
   return users.filter((user) => user.room === room);
 }
 
+// Send chat message in database
 const sendMsg = async (userId, role, username, avatarUrl, message, roomName) => {
   try {
     const newMsg = {
@@ -61,6 +62,7 @@ const sendMsg = async (userId, role, username, avatarUrl, message, roomName) => 
   }
 }
 
+// Get chat message inside database
 const loadMsg = async (roomName) => {
   try {
     const chat = await ChatModel.find({ room: roomName });
