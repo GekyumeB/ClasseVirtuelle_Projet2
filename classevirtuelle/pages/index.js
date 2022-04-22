@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/client";
-import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 import { getSession } from "next-auth/client";
 
+import Navbar from '../components/Navbar'
+
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,34 +35,7 @@ export default function Home() {
 
   return (
     <div >
-      {/*&&&&&&&&&&&&&&&&&&&&&&&&&&&*/}
-      <div>
-        <div className="bg-gb w-full  h-24 flex space-x-3 items-center justify-center sm:h-24 sm:space-x-8  md:h-24  md:space-x-8  lg:h-20 lg:space-x-16 ">
-          <div className="bg-gb items-center  ">
-            <div>
-              <p className="text-blue-400 opacity: 1 font-logo md:text-xl lg:text-3xl text-md text-center">
-                Classe
-              </p>
-            </div>
-            <p className="text-blue-400 opacity: 1 font-logo  text-md md:text-xl lg:text-3xl ">
-              Virtuelle
-            </p>
-          </div>
-          <p
-            onClick={() => router.push('/')}
-            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-          >
-            Login
-          </p>
-          <p
-            onClick={() => router.push('/signup')}
-            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-          >
-            Signup
-          </p>
-        </div>
-      </div>
-      {/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/}
+      <Navbar />
       <div className="flex min-h-[90vh] justify-center items-center bg-black h-screen">
         <div className="w-[35%] h-[70vh] bg-slate-900 rounded-lg relative flex z-20  border-solid border-[1px] border-slate-400">
           <div className="flex items-center px-[20px] w-full">
