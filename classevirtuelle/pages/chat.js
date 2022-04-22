@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
 import { loadUser } from "../redux/actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
-import { signOut } from "next-auth/client";
-import Link from "next/link";
-import convertTime from '../utils/convertTime'
+import ChatLabel from "../components/ChatLabel";
+import Navbar from "../components/Navbar";
 
 const socket = io("http://localhost:3000");
 
 export default function chat() {
   const dispatch = useDispatch();
-  const router = useRouter();
   const mesageEndRef = useRef(null)
 
   const [message, setMessage] = useState("");
@@ -47,14 +44,10 @@ export default function chat() {
     });
   }, []);
 
-  const logoutHandler = () => {
-    signOut();
-  };
-
   // Scroll au dernier message entre
   useEffect(() => {
     mesageEndRef.current?.scrollIntoView();
-  },[chat])
+  }, [chat])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,38 +58,9 @@ export default function chat() {
   };
 
   return (
-
     <div className="h-screen w-full bg-neutral-900">
-      {/*&&&&&&&&&&&&&&&&&&&&&&&&&&&*/}
-      <div>
-        <div className="bg-gb w-full  h-24 flex space-x-3 items-center justify-center sm:h-24 sm:space-x-8  md:h-24  md:space-x-8  lg:h-20 lg:space-x-16 ">
-          <div className="bg-gb items-center  ">
-            <div>
-              <p className="text-blue-400 opacity: 1 font-logo md:text-xl lg:text-3xl text-md text-center">
-                Classe
-              </p>
-            </div>
-            <p className="text-blue-400 opacity: 1 font-logo  text-md md:text-xl lg:text-3xl ">
-              Virtuelle
-            </p>
-          </div>
-          <p
-            onClick={() => router.push('/chat')}
-            className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-          >
-            Chat
-          </p>
-          <Link href="/">
-            <a className="p-2 text-white font-semibold bg-red-600 uppercase" onClick={logoutHandler}>
-              Quitter
-            </a>
-          </Link>
-        </div>
-      </div>
-      {/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/}
-
+      <Navbar />
       <div className="flex justify-center pt-5">
-
         <div className="bg-cyan-500 mr-2 rounded-[2rem]">
           <div className="mb-3">
             <p>ㅤㅤㅤEn Classeㅤㅤㅤ</p>
@@ -132,8 +96,9 @@ export default function chat() {
             })
           }
         </div>
+
         <div className="max-w-2xl border rounded-[2rem] bg-white">
-          <div class="grid grid-cols-4 gap-4 bg-cyan-500 rounded-full">
+          <div class="flex bg-cyan-500 rounded-full">
             <div className="relative">
               <span className="absolute w-max text-green-500">
                 <svg width="20" height="20">
@@ -150,8 +115,8 @@ export default function chat() {
                 </figure>
               )}
             </div>
-            <div className="flex flex-col leading-tight">
-              <div className="text-2xl mt-1 flex items-center">
+            <div className="flex justify-center mx-auto flex-col">
+              <div className="text-2xl">
                 <span className="text-gray-700 mr-3 uppercase font-bold">
                   {user && ` ${user.name}`}
 
@@ -159,57 +124,19 @@ export default function chat() {
               </div>
             </div>
           </div>
-          <div className="block overflow-y-scroll max-h-[35rem]">
+          <div className="block overflow-y-scroll max-h-[29rem]">
             <br />
             {chat.map((c) => {
               return (
-                <div class="chat2" className="relative w-full p-6 overflow-y-auto h-25">
+                <div className="relative w-full p-6 overflow-y-auto h-25">
                   <ul className="space-y-2">
                     <li className="flex justify-start">
                       <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
                         <div className="grid grid-cols-4 gap-4">
-                          {
-                            c.userId === user._id ? (
-                              <div className="flex">                              
-                              <div className="block w-max rounded-[2rem] bg-green-100">
-                                <div className="flex">
-                                  <p className="pl-5 uppercase font-semibold">{c.username}</p> <p className="pl-56 text-xs">{convertTime(c.time)}</p>
-                                </div>
-                                <div className="min-w-[500px] max-w-[500px] pl-8 font-serif">
-                                  {c.text}
-                                </div>
-                              </div>
-                            </div>
-                            ) : (
-                              <div className="flex">
-                                <div className="relative my-auto mr-4">
-                                  <span className="absolute w-max text-green-500">
-                                    <svg className="w-3 h-3">
-                                      <circle cx="4" cy="4" r="4" fill="currentColor"></circle>
-                                    </svg>
-                                  </span>
-                                  {user && (
-                                    <figure className="w-8 h-8 rounded-full">
-                                      <img
-                                        src={c.avatarUrl}
-                                        className="rounded-full "
-                                      />
-                                    </figure>
-                                  )}
-                                </div>
-                                <div className="block w-max rounded-[2rem] bg-blue-100">
-                                  <div className="flex">
-                                    <p className="pl-5 uppercase font-semibold">{c.username}</p> <p className="pl-52 text-xs">{convertTime(c.time)}</p>
-                                  </div>
-                                  <div className="min-w-[500px] max-w-[500px] pl-8 font-serif">
-                                    {c.text}
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          }
 
-                          <div ref={mesageEndRef}/>
+                          <>{user && (<ChatLabel msg={c} userId={user._id} />)}</>
+
+                          <div ref={mesageEndRef} />
 
                         </div>
                       </div>
@@ -222,7 +149,7 @@ export default function chat() {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 grid-flow-col gap-4 items-center justify-between w-full p-3 border-t border-gray-300">
-              <div className="justify-self-auto">
+              <div className="col-span-2">
                 <input
                   type="text"
                   name="message"
@@ -235,7 +162,7 @@ export default function chat() {
                   required >
                 </input>
               </div>
-              <div className="justify-self-auto">
+              <div className="mr-10">
                 <button type="submit">
                   <svg className="w-10 h-10 mt-10 text-gray-500 origin-right transform rotate-90" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20" fill="currentColor">
