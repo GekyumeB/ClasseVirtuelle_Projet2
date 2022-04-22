@@ -97,11 +97,7 @@ export default function chat() {
 
       <div className="flex justify-center pt-5">
 
-<<<<<<< Updated upstream
-        <div className="bg-blue-500 max-h-full mr-2">
-=======
         <div className="bg-cyan-500 mr-2 rounded-[2rem]">
->>>>>>> Stashed changes
           <div className="mb-3">
             <p>ㅤㅤㅤEn Classeㅤㅤㅤ</p>
           </div>
@@ -201,15 +197,9 @@ export default function chat() {
                                     </figure>
                                   )}
                                 </div>
-<<<<<<< Updated upstream
-                                <div className="block w-max rounded bg-blue-300">
-                                  <div className="">
-                                    <p className="pl-3">{c.username + "ㅤㅤㅤ"}{convertTime(c.time)}</p> <p className="pl-3"></p>
-=======
                                 <div className="block w-max rounded-[2rem] bg-blue-100">
                                   <div className="flex">
                                     <p className="pl-5 uppercase font-semibold">{c.username}</p> <p className="pl-52 text-xs">{convertTime(c.time)}</p>
->>>>>>> Stashed changes
                                   </div>
                                   <div className="min-w-[500px] max-w-[500px] pl-8 font-serif">
                                     {c.text}
