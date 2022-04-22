@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
 import { loadUser } from "../redux/actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +12,7 @@ const socket = io("http://localhost:3000");
 
 export default function chat() {
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
 
@@ -156,7 +156,7 @@ export default function chat() {
         <div className="max-w-2xl border rounded bg-slate-400">
           <div class="grid grid-cols-4 gap-4">
             <div className="relative">
-              <span className="absolute text-green-500">
+              <span className="absolute w-max text-green-500">
                 <svg width="20" height="20">
                   <circle cx="8" cy="8" r="8" fill="currentColor"></circle>
                 </svg>
@@ -180,23 +180,23 @@ export default function chat() {
               </div>
             </div>
           </div>
-          <div className="block">
+          <div className="block overflow-y-scroll max-h-[35rem]">
             <br />
             {chat.map((c) => {
               return (
 
-                <div className="relative w-full p-6 overflow-y-auto h-25">
+                <div class="chat2" className="relative w-full p-6 overflow-y-auto h-25">
                   <ul className="space-y-2">{console.log(c)}
                     <li className="flex justify-start">
                       <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
                         <div className="grid grid-cols-4 gap-4">
                           {
                             c.userId === user._id ? (
-                              <div className="block bg-green-200">
-                                <div>
+                              <div className="block w-max rounded bg-green-300">
+                                <div className="max-w">
                                 {convertTime(c.time)}
                                 </div>
-                                <div> 
+                                <div className = "max-w-[550px]"> 
                                 {c.text}
                                 </div>
                                
@@ -206,7 +206,7 @@ export default function chat() {
                              <div className="flex">
                                 
                                 <div className="relative my-auto mr-4">
-                                  <span className="absolute text-green-500">
+                                  <span className="absolute w-max text-green-500">
                                     <svg className="w-3 h-3">
                                       <circle cx="4" cy="4" r="4" fill="currentColor"></circle>
                                     </svg>
@@ -218,19 +218,17 @@ export default function chat() {
                                         className="rounded-full "
                                       />
                                     </figure>
-                                  )}
+                                  )} 
                                 </div>
-                             
-                             <div className="block bg-blue-300">
-                                <div className="flex b">
-                                    <p className="pl-3">{c.username}</p> <p className="pl-3">{convertTime(c.time)}</p>
+                              <div className="block w-max rounded bg-blue-300">
+                                <div className="">
+                                  <p className="pl-3">{c.username}</p> <p className="pl-3">{convertTime(c.time)}</p>
                                 </div>
-                                <div>
-                                  {c.text}
+                                <div className = "min-w-[500px] max-w-[500px]"> 
+                                {c.text}
                                 </div>
-
-                             </div>
-                             
+                               
+                              </div>
                               </div>
                            )
                           }

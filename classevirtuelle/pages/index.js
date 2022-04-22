@@ -48,24 +48,23 @@ export default function Home() {
             Virtuelle
           </p>
         </div>
-
+        <p
+          onClick={() => router.push('/chat')}
+          className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
+        >
+          Chat
+        </p>
         <p
           onClick={() => router.push('/')}
           className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
         >
-          Info
+          Login
         </p>
         <p
-          onClick={() => router.push('/Rejoindre')}
+          onClick={() => router.push('/signup')}
           className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
         >
-          Rejoindre une classe
-        </p>
-        <p
-          onClick={() => router.push('/Creation')}
-          className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
-        >
-          Création de classe
+          Signup
         </p>
       </div>
     </div>

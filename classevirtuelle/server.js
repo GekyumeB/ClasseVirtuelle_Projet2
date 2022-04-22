@@ -53,7 +53,7 @@ app.prepare().then(() => {
             //console.log(c.username)
             //console.log(c.avatarUrl)
             //console.log(c.time)
-            socket.emit("message", formatMessage(c.userId, c.role, c.username, c.avatarUrl, c.time));
+            socket.emit("message", formatMessage(c.userId, c.role, c.username, c.avatarUrl, c.text, c.time));
           })
         }
       //console.log('***/ load /***');
