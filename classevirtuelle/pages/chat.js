@@ -66,7 +66,7 @@ export default function chat() {
 
   return (
 
-    <div className="h-screen w-full bg-neutral-900">
+    <div className="h-full w-full bg-neutral-900">
       {/*&&&&&&&&&&&&&&&&&&&&&&&&&&&*/}
       <div>
         <div className="bg-gb w-full  h-24 flex space-x-3 items-center justify-center sm:h-24 sm:space-x-8  md:h-24  md:space-x-8  lg:h-20 lg:space-x-16 ">
@@ -97,7 +97,7 @@ export default function chat() {
 
       <div className="flex justify-center pt-5">
 
-        <div className="bg-blue-500 mr-2">
+        <div className="bg-blue-500 max-h-full mr-2">
           <div className="mb-3">
             <p>ㅤㅤㅤEn Classeㅤㅤㅤ</p>
           </div>

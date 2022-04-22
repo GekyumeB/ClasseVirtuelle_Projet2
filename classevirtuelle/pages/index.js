@@ -27,6 +27,7 @@ export default function Home() {
 
     if (result.error) {
       toast.error(result.error);
+      alert("Courriel ou mot de passe invalide!");
     } else {
       window.location.href = "/chat";
     }
