@@ -70,17 +70,53 @@ export default function chat() {
   };
 
   return (
+    
     <div className="h-screen w-full bg-neutral-900">
-      <Link href="/">
+            {/*&&&&&&&&&&&&&&&&&&&&&&&&&&&*/}
+            <div>
+      <div className="bg-gb w-full  h-24 flex space-x-3 items-center justify-center sm:h-24 sm:space-x-8  md:h-24  md:space-x-8  lg:h-20 lg:space-x-16 ">
+        <div className="bg-gb items-center  ">
+          <div>
+            <p className="text-blue-400 opacity: 1 font-logo md:text-xl lg:text-3xl text-md text-center">
+              Classe
+            </p>
+          </div>
+          <p className="text-blue-400 opacity: 1 font-logo  text-md md:text-xl lg:text-3xl ">
+            Virtuelle
+          </p>
+        </div>
+        <p
+          onClick={() => router.push('/chat')}
+          className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
+        >
+          Chat
+        </p>
+        <p
+          onClick={() => router.push('/')}
+          className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
+        >
+          Login
+        </p>
+        <p
+          onClick={() => router.push('/signup')}
+          className="link text-blue-400 opacity: 1 font-text text-sm md:text-xl lg:text-2xl motion-safe:hover:scale-110"
+        >
+          Signup
+        </p>
+        <Link href="/">
         <a className="p-2 text-white font-semibold bg-red-600 uppercase" onClick={logoutHandler}>
           Quitter
         </a>
       </Link>
-      <div className="flex justify-center pt-20">
+      </div>
+    </div>
+      {/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/}
+      
+      <div className="flex justify-center pt-5">
 
         <div className="bg-blue-500 mr-2">
           <div className="mb-3">
-            <p>En Classe</p>
+            <p>ㅤㅤㅤEn Classeㅤㅤㅤ</p>
           </div>
           {
             usersConnect && usersConnect.map((uc, i) => {
