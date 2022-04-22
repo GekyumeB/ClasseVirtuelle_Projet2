@@ -97,7 +97,11 @@ export default function chat() {
 
       <div className="flex justify-center pt-5">
 
+<<<<<<< Updated upstream
         <div className="bg-blue-500 max-h-full mr-2">
+=======
+        <div className="bg-cyan-500 mr-2 rounded-[2rem]">
+>>>>>>> Stashed changes
           <div className="mb-3">
             <p>ㅤㅤㅤEn Classeㅤㅤㅤ</p>
           </div>
@@ -107,7 +111,7 @@ export default function chat() {
                 <div key={i} className='flex p-2'>
                   <div>
                     {user._id !== uc.userprofile._id ? (
-                      <div className="flex">
+                      <div className="flex uppercase">
                         <div className="mr-3">
                           <span className="absolute text-green-500">
                             <svg className="w-3 h-3">
@@ -132,8 +136,8 @@ export default function chat() {
             })
           }
         </div>
-        <div className="max-w-2xl border rounded bg-slate-400">
-          <div class="grid grid-cols-4 gap-4">
+        <div className="max-w-2xl border rounded-[2rem] bg-white">
+          <div class="grid grid-cols-4 gap-4 bg-cyan-500 rounded-full">
             <div className="relative">
               <span className="absolute w-max text-green-500">
                 <svg width="20" height="20">
@@ -152,7 +156,7 @@ export default function chat() {
             </div>
             <div className="flex flex-col leading-tight">
               <div className="text-2xl mt-1 flex items-center">
-                <span className="text-gray-700 mr-3">
+                <span className="text-gray-700 mr-3 uppercase font-bold">
                   {user && ` ${user.name}`}
 
                 </span>
@@ -170,15 +174,16 @@ export default function chat() {
                         <div className="grid grid-cols-4 gap-4">
                           {
                             c.userId === user._id ? (
-                              <div className="block w-max rounded bg-green-300">
-                                <div className="max-w">
-                                  {convertTime(c.time)}
+                              <div className="flex">                              
+                              <div className="block w-max rounded-[2rem] bg-green-100">
+                                <div className="flex">
+                                  <p className="pl-5 uppercase font-semibold">{c.username}</p> <p className="pl-56 text-xs">{convertTime(c.time)}</p>
                                 </div>
-                                <div className="max-w-[550px]">
+                                <div className="min-w-[500px] max-w-[500px] pl-8 font-serif">
                                   {c.text}
                                 </div>
-
                               </div>
+                            </div>
                             ) : (
                               <div className="flex">
                                 <div className="relative my-auto mr-4">
@@ -196,11 +201,17 @@ export default function chat() {
                                     </figure>
                                   )}
                                 </div>
+<<<<<<< Updated upstream
                                 <div className="block w-max rounded bg-blue-300">
                                   <div className="">
                                     <p className="pl-3">{c.username + "ㅤㅤㅤ"}{convertTime(c.time)}</p> <p className="pl-3"></p>
+=======
+                                <div className="block w-max rounded-[2rem] bg-blue-100">
+                                  <div className="flex">
+                                    <p className="pl-5 uppercase font-semibold">{c.username}</p> <p className="pl-52 text-xs">{convertTime(c.time)}</p>
+>>>>>>> Stashed changes
                                   </div>
-                                  <div className="min-w-[500px] max-w-[500px]">
+                                  <div className="min-w-[500px] max-w-[500px] pl-8 font-serif">
                                     {c.text}
                                   </div>
                                 </div>
