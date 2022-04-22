@@ -62,8 +62,8 @@ export default function chat() {
       <Navbar />
       <div className="flex justify-center pt-5">
         <div className="bg-cyan-500 mr-2 rounded-[2rem]">
-          <div className="mb-3">
-            <p>ㅤㅤㅤEn Classeㅤㅤㅤ</p>
+          <div className="mb-3 flex justify-center">
+            <p className="uppercase font-semibold">En Classe</p>
           </div>
           {
             usersConnect && usersConnect.map((uc, i) => {

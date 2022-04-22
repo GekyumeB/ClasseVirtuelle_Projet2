@@ -31,9 +31,6 @@ app.prepare().then(() => {
     console.log(`>> Ready on http://${hostname}:${port}`);
   });
 
-  const botName = "Bot";
-  const botImage = 'https://res.cloudinary.com/dhouw3lii/image/upload/v1650569520/ClasseVirtuelle/avatars/bot_anw0og.png'
-
   const io = socket(server, { cors: { origin: '*' } });
 
   io.on('connection', socket => {
